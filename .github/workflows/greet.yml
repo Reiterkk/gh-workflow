@@ -1,0 +1,25 @@
+name: Greet Somebody
+
+on: 
+  workflow_dispatch:
+    inputs:
+      addressee:
+        type: choice
+        description: who do you want to greet
+        options: 
+          - World
+          - Mars
+          - Sun
+        required: true
+      message:
+        type: string
+        description: What do you want to say?
+        required: true
+
+jobs:
+  custom-job:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Print Message
+        run: | 
+          echo Hello ${{inputs.addressee}}! What I always wanted to tell you: ${{inputs.message}}
