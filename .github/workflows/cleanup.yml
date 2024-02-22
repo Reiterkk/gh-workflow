@@ -13,7 +13,10 @@ on:
         type: string
         description: Package name.
         required: true
-
+  workflow_run:
+    workflows: ["Test1", "Test2"]
+    types:
+      - completed
 jobs:
   test:
     runs-on: [ubuntu-latest]

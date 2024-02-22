@@ -85,32 +85,32 @@ jobs:
       #     echo Remaining Workflows from env Var: $WORKFLOW_JSON_STRING
 
   
-  test1-job:
-    name: Test1
-    needs: build-job
-    if: ${{ inputs.run-test1 }}
-    uses: ./.github/workflows/test1.yml
-    with:
-      package: 'Package1'
-    secrets: inherit
+  # test1-job:
+  #   name: Test1
+  #   needs: build-job
+  #   if: ${{ inputs.run-test1 }}
+  #   uses: ./.github/workflows/test1.yml
+  #   with:
+  #     package: 'Package1'
+  #   secrets: inherit
 
-  test2-job:
-    name: Test2
-    needs: build-job
-    if: ${{ inputs.run-test2 }}
-    uses: ./.github/workflows/test2.yml
-    with:
-      package: 'Package2'
-    secrets: inherit
+  # test2-job:
+  #   name: Test2
+  #   needs: build-job
+  #   if: ${{ inputs.run-test2 }}
+  #   uses: ./.github/workflows/test2.yml
+  #   with:
+  #     package: 'Package2'
+  #   secrets: inherit
 
-  call-cleanup:
-      name: Cleanup
-      needs: [build-job, test1-job, test2-job]
-      if: ${{ inputs.run-cleanup }}
-      uses: ./.github/workflows/cleanup.yml
-      with:
-        package: 'Package for Cleanup'
-      secrets: inherit
+  # call-cleanup:
+  #     name: Cleanup
+  #     needs: [build-job, test1-job, test2-job]
+  #     if: ${{ inputs.run-cleanup }}
+  #     uses: ./.github/workflows/cleanup.yml
+  #     with:
+  #       package: 'Package for Cleanup'
+  #     secrets: inherit
 
   # call-next-workflow:
   #   needs: build-job
@@ -123,8 +123,9 @@ jobs:
     needs: build-job
     runs-on: [ubuntu-latest]
     steps:
-    - name: Dispatch workflow
-      uses: actions/github-script@v6
+
+    - name: Dispatch Test1
+      uses: actions/github-script@v7
       with:
         # github-token: ${{ github.token }}
         script: |
@@ -134,6 +135,21 @@ jobs:
             workflow_id: 'test1.yml',
             ref: '${{ github.ref_name }}',
             inputs: {
-              package: 'Dispatched package!'
+              package: 'Dispatched package for Test1!'
+            },
+          })
+
+    - name: Dispatch Test2
+      uses: actions/github-script@v7
+      with:
+        # github-token: ${{ github.token }}
+        script: |
+          await github.rest.actions.createWorkflowDispatch({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            workflow_id: 'test2.yml',
+            ref: '${{ github.ref_name }}',
+            inputs: {
+              package: 'Dispatched package for Test2!'
             },
           })
