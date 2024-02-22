@@ -54,7 +54,7 @@ jobs:
         run: |
           echo JSON String from env Var: $WORKFLOW_JSON_STRING
 
-          nextWorkflow="$(echo '$WORKFLOW_JSON_STRING' | jq '.[0]')";
+          nextWorkflow="$(echo $WORKFLOW_JSON_STRING | jq '.[0]')";
           echo "$nextWorkflow";
           echo "NEXT_WORKFLOW=$nextWorkflow" >> "$GITHUB_ENV"
           echo Next Workflow from env Var: "$NEXT_WORKFLOW"
