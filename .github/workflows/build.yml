@@ -1,0 +1,141 @@
+name: Build
+
+on: 
+  workflow_dispatch:
+    inputs:
+      run-test1:
+        type: boolean
+        description: Run test1 workflow
+        required: true
+        default: true
+      run-test2:
+        type: boolean
+        description: Run test2 workflow
+        required: true
+        default: true
+      run-cleanup:
+        type: boolean
+        description: Run cleanup workflow
+        required: true
+        default: true
+  workflow_call:
+    inputs:
+      run-test1:
+        type: boolean
+        description: Run test1 workflow
+        required: true
+        default: true
+      run-test2:
+        type: boolean
+        description: Run test2 workflow
+        required: true
+        default: true
+      run-cleanup:
+        type: boolean
+        description: Run cleanup workflow
+        required: true
+        default: true
+
+# env:
+#   TEST_WORKFLOW: ${{ inputs.run-test1 && '"test1", ' || '"a", '}}
+#   CLEANUP_WORKFLOW: ${{ inputs.run-cleanup && '"cleanup"' || '"b"'}}
+#   WORKFLOW_JSON_STRING: ''
+#   NEXT_WORKFLOW: ''
+
+jobs:
+  build-job:
+    runs-on: [ubuntu-latest]
+    # outputs:
+    #   next_workflow: ${{ steps.set-vars.outputs.next_workflow }}
+    #   workflow_json_string: ${{ steps.set-vars.outputs.workflow_json_string }}
+    steps:
+      - name: Print Inputs
+        run: |
+          echo run-test1: ${{ inputs.run-test1}}
+          echo run-test2: ${{ inputs.run-test2}}
+          echo run-cleanup: ${{ inputs.run-cleanup}}
+
+      # - name: Print Message
+      #   run: | 
+      #     echo Hello from Build Workflow! TEST_WORKFLOW: $TEST_WORKFLOW, CLEANUP_WORKFLOW: $CLEANUP_WORKFLOW
+
+      # - name: Print JSON String
+      #   run: |
+      #     echo JSON String: ${{ format('[{0}{1}]', env.TEST_WORKFLOW, env.CLEANUP_WORKFLOW) }}
+      #     echo "WORKFLOW_JSON_STRING=${{ format('[{0}{1}]', '$TEST_WORKFLOW', '$CLEANUP_WORKFLOW') }}" >> $GITHUB_ENV
+
+      # - name: Extrakt Next Workflow and update list
+      #   id: set-vars
+      #   run: |
+      #     echo JSON String from env Var: $WORKFLOW_JSON_STRING
+
+      #     nextWorkflow="$(echo $WORKFLOW_JSON_STRING | jq -r '.[0]')";
+      #     echo "$nextWorkflow";
+      #     echo "NEXT_WORKFLOW=$nextWorkflow" >> "$GITHUB_ENV"
+      #     echo "next_workflow=$nextWorkflow" >> "$GITHUB_OUTPUT"
+
+      #     remainingWorkflows="$(echo $WORKFLOW_JSON_STRING | jq -c 'del(.[0])')";
+      #     echo "$remainingWorkflows";
+      #     echo "WORKFLOW_JSON_STRING=$remainingWorkflows" >> "$GITHUB_ENV"
+      #     echo "workflow_json_string=$remainingWorkflows" >> "$GITHUB_OUTPUT"
+
+      # - name: Print Next Workflow env Var
+      #   run: |  
+      #     echo Next Workflow from env Var: $NEXT_WORKFLOW
+      #     echo Remaining Workflows from env Var: $WORKFLOW_JSON_STRING
+
+  
+  test1-job:
+    name: Test1
+    needs: build-job
+    if: ${{ inputs.run-test1 }}
+    uses: ./.github/workflows/test1.yml
+    with:
+      package: 'Package1'
+    secrets: inherit
+
+  test2-job:
+    name: Test2
+    needs: build-job
+    if: ${{ inputs.run-test2 }}
+    uses: ./.github/workflows/test2.yml
+    with:
+      package: 'Package2'
+    secrets: inherit
+
+  call-cleanup:
+      name: Cleanup
+      needs: [build-job, test1-job, test2-job]
+      if: ${{ inputs.run-cleanup }}
+      uses: ./.github/workflows/cleanup.yml
+      with:
+        package: 'Package for Cleanup'
+      secrets: inherit
+
+  # call-next-workflow:
+  #   needs: build-job
+  #   uses: ./.github/workflows/call-workflow.yml
+  #   with:
+  #     workflow-to-call: ${{needs.build-job.outputs.next_workflow}}
+  #     remaining-workflows: ${{needs.build-job.outputs.workflow_json_string}}
+  #   secrets: inherit
+
+    # needs: build-job
+    # runs-on: [ubuntu-latest]
+    # steps:
+    # - name: Dispatch workflow
+    #   uses: actions/github-script@v7
+    #   with:
+    #     github-token: ${{ github.token }}
+    #     script: |
+    #       console.log(core.getInput('foo'))
+    #       await github.rest.actions.createWorkflowDispatch({
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         workflow_id: 'test.yml',
+    #         ref: '${{ github.ref_name }}',
+    #         inputs: {
+    #           workflows_to_dispatch: $WORKFLOW_JSON_STRING
+    #         },
+    #       })
+       

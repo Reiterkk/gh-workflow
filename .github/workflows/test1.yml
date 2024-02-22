@@ -1,4 +1,4 @@
-name: Cleanup
+name: Test1
 
 on: 
   workflow_dispatch:
@@ -20,4 +20,4 @@ jobs:
     steps:
       - name: Print Message
         run: | 
-          echo Hello from Cleanup Workflow! Package Name: ${{inputs.package}}
+          echo Hello from Test1 Workflow! Package Name: ${{inputs.package}}
