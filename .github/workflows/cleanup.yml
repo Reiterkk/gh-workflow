@@ -14,7 +14,9 @@ on:
   #       description: Package name.
   #       required: true
   workflow_run:
-    workflows: [Test1]
+    workflows: 
+      - Build
+      - Test1
     types:
       - completed
 jobs:
@@ -23,4 +25,4 @@ jobs:
     steps:
       - name: Print Message
         run: | 
-          echo Hello from Cleanup Workflow! Package Name: ${{inputs.package}}
+          echo Hello from Cleanup Workflow! Package Name:
