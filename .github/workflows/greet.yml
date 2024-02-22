@@ -38,7 +38,7 @@ jobs:
     steps:
       - name: Print Message
         run: | 
-          echo Hello from Build Workflow! TEST_WORKFLOW: '$TEST_WORKFLOW'; CLEANUP_WORKFLOW: '$CLEANUP_WORKFLOW'
+          echo Hello from Build Workflow! TEST_WORKFLOW: '$TEST_WORKFLOW', CLEANUP_WORKFLOW: '$CLEANUP_WORKFLOW'
       - name: Print JSON String
         run: |
           echo JSON String: ${{ format('''[{0}{1}]''', '$TEST_WORKFLOW', '$CLEANUP_WORKFLOW') }}
