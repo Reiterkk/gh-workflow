@@ -50,7 +50,7 @@ jobs:
           echo JSON String: ${{ format('[{0}{1}]', env.TEST_WORKFLOW, env.CLEANUP_WORKFLOW) }}
           echo "WORKFLOW_JSON_STRING=${{ format('[{0}{1}]', '$TEST_WORKFLOW', '$CLEANUP_WORKFLOW') }}" >> $GITHUB_ENV
 
-      - name: Print Updated env Var
+      - name: Extrakt Next Workflow and update list
         run: |
           echo JSON String from env Var: $WORKFLOW_JSON_STRING
 
@@ -58,9 +58,14 @@ jobs:
           echo "$nextWorkflow";
           echo "NEXT_WORKFLOW=$nextWorkflow" >> "$GITHUB_ENV"
 
+          remainingWorkflows="$(echo $WORKFLOW_JSON_STRING | jq 'del(.[0])')";
+          echo "$remainingWorkflows";
+          echo "WORKFLOW_JSON_STRING=$remainingWorkflows" >> "$GITHUB_ENV"
+
       - name: Print Next Workflow env Var
         run: |  
           echo Next Workflow from env Var: $NEXT_WORKFLOW
+          echo Remaining Workflows from env Var: $WORKFLOW_JSON_STRING
 
-  # call-next-workflow:
-  #   uses: ./.github/workflows/"$NEXT_WORKFLOW".yml
+  call-next-workflow:
+    uses: ./.github/workflows/$NEXT_WORKFLOW.yml

@@ -1,4 +1,4 @@
-name: OpenSUT Test
+name: Test
 
 on: 
   workflow_dispatch:
