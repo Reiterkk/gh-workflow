@@ -125,19 +125,28 @@ jobs:
     steps:
 
     - name: Dispatch Test1
-      uses: actions/github-script@v7
+      uses: aurelien-baudet/workflow-dispatch@v2.1.1
       with:
-        # github-token: ${{ github.token }}
-        script: |
-          await github.rest.actions.createWorkflowDispatch({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            workflow_id: 'test1.yml',
-            ref: '${{ github.ref_name }}',
-            inputs: {
-              package: 'Dispatched package for Test1!'
-            },
-          })
+        workflow: test1.yml
+        repo: context.repo.repo
+        token: ${{ github.token }}
+        ref: '${{ github.ref_name }}'
+        inputs: '{ "package": "Dispatched package for Test1! Waiting..." }'
+
+    # - name: Dispatch Test1
+    #   uses: actions/github-script@v7
+    #   with:
+    #     # github-token: ${{ github.token }}
+    #     script: |
+    #       await github.rest.actions.createWorkflowDispatch({
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         workflow_id: 'test1.yml',
+    #         ref: '${{ github.ref_name }}',
+    #         inputs: {
+    #           package: 'Dispatched package for Test1!'
+    #         },
+    #       })
 
     - name: Dispatch Test2
       uses: actions/github-script@v7
