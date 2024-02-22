@@ -1,25 +1,54 @@
-name: Greet Somebody
+name: Build
 
 on: 
   workflow_dispatch:
     inputs:
-      addressee:
-        type: choice
-        description: who do you want to greet
-        options: 
-          - World
-          - Mars
-          - Sun
+      run-tests:
+        type: boolean
+        description: Run test workflow
         required: true
-      message:
-        type: string
-        description: What do you want to say?
+        default: true
+      run-cleanup:
+        type: boolean
+        description: Run cleanup workflow
         required: true
+        default: true
+  workflow_call:
+    inputs:
+      run-tests:
+        type: boolean
+        description: Run test workflow
+        required: true
+        default: true
+      run-cleanup:
+        type: boolean
+        description: Run cleanup workflow
+        required: true
+        default: true
+
+env:
+  TEST_WORKFLOW: ${{ inputs.run-tests == 'true'  && '"test", ' || ''}}
+  CLEANUP_WORKFLOW: ${{ inputs.run-tests == 'true' && '"cleanup"' || ''}}
+  WORKFLOW_JSON_STRING: ''
+  NEXT_WORKFLOW: ''
 
 jobs:
-  custom-job:
+  build-job:
     runs-on: [ubuntu-latest]
     steps:
       - name: Print Message
         run: | 
-          echo Hello ${{inputs.addressee}}! What I always wanted to tell you: ${{inputs.message}}
+          echo Hello from Build Workflow! TEST_WORKFLOW: '$TEST_WORKFLOW'; CLEANUP_WORKFLOW: '$CLEANUP_WORKFLOW'
+      - name: Print JSON String
+        run: |
+          echo JSON String: ${{ format('''[{0}{1}]''', '$TEST_WORKFLOW', '$CLEANUP_WORKFLOW') }}
+          echo "WORKFLOW_JSON_STRING=${{ format('''[{0}{1}]''', '$TEST_WORKFLOW', '$CLEANUP_WORKFLOW') }}" >> $GITHUB_ENV
+          echo JSON String from env Var: "$WORKFLOW_JSON_STRING"
+
+          nextWorkflow="$(echo '$WORKFLOW_JSON_STRING' | jq '.[0]')";
+          echo "$nextWorkflow";
+          echo "NEXT_WORKFLOW=$nextWorkflow" >> "$GITHUB_OUTPUT"
+          echo Next Workflow from env Var: "$NEXT_WORKFLOW"
+
+  call-next-workflow:
+    uses: ./.github/workflows/"$NEXT_WORKFLOW".yml

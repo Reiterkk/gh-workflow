@@ -1,0 +1,22 @@
+name: OpenSUT Test
+
+on: 
+  workflow_dispatch:
+    inputs:
+      workflows-to-dispatch:
+        type: string
+        description: JSON string containing a list of workflows to be dispatched.
+        required: true
+      workflow-id:
+        type: number
+        description: Index of next workflow to be dispatched.
+        required: true
+
+jobs:
+  opensut-test:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Print Message
+        run: | 
+          echo Hello from OpenSUT Test Workflow!
+
