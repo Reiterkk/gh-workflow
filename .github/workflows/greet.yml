@@ -68,22 +68,28 @@ jobs:
           echo Remaining Workflows from env Var: $WORKFLOW_JSON_STRING
 
   call-next-workflow:
-    needs: build-job
-    runs-on: [ubuntu-latest]
-    steps:
-    - name: Dispatch workflow
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{ github.token }}
-        script: |
-          await github.rest.actions.createWorkflowDispatch({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            workflow_id: 'test.yml',
-            ref: '${{ github.ref_name }}',
-            inputs: {
-              workflows_to_dispatch: $WORKFLOW_JSON_STRING
-            },
-          })
+    uses: ./.github/workflows/call-workflow.yml
+    with:
+      workflow-to-call: $NEXT_WORKFLOW
+      remaining-workflows: $WORKFLOW_JSON_STRING
+    secrets: inherit
 
-    # uses: ./.github/workflows/${{env.TEST_WORKFLOW}}.yml
+    # needs: build-job
+    # runs-on: [ubuntu-latest]
+    # steps:
+    # - name: Dispatch workflow
+    #   uses: actions/github-script@v7
+    #   with:
+    #     github-token: ${{ github.token }}
+    #     script: |
+    #       console.log(core.getInput('foo'))
+    #       await github.rest.actions.createWorkflowDispatch({
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         workflow_id: 'test.yml',
+    #         ref: '${{ github.ref_name }}',
+    #         inputs: {
+    #           workflows_to_dispatch: $WORKFLOW_JSON_STRING
+    #         },
+    #       })
+       
