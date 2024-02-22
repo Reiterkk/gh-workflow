@@ -127,8 +127,7 @@ jobs:
     - name: Dispatch Test1
       uses: aurelien-baudet/workflow-dispatch@v2.1.1
       with:
-        workflow: Test1
-        repo: context.repo.repo
+        workflow: test1.yml
         token: ${{ github.token }}
         ref: '${{ github.ref_name }}'
         inputs: '{ "package": "Dispatched package for Test1! Waiting..." }'
