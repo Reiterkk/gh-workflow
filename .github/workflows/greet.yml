@@ -82,7 +82,7 @@ jobs:
             workflow_id: '${{env.NEXT_WORKFLOW}}.yml',
             ref: '${{ github.ref_name }}',
             inputs: {
-              workflows-to-dispatch: ${{ env.WORKFLOW_JSON_STRING }}
+              workflows_to_dispatch: ${{ env.WORKFLOW_JSON_STRING }}
             },
           })
 
