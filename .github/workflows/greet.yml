@@ -27,8 +27,8 @@ on:
         default: true
 
 env:
-  TEST_WORKFLOW: ${{ inputs.run-tests == 'true'  && '"test", ' || 'a, '}}
-  CLEANUP_WORKFLOW: ${{ inputs.run-tests == 'true' && '"cleanup"' || 'b'}}
+  TEST_WORKFLOW: ${{ inputs.run-tests == 'true'  && '"test", ' || '"a", '}}
+  CLEANUP_WORKFLOW: ${{ inputs.run-tests == 'true' && '"cleanup"' || '"b"'}}
   WORKFLOW_JSON_STRING: ''
   NEXT_WORKFLOW: ''
 
@@ -38,12 +38,12 @@ jobs:
     steps:
       - name: Print Message
         run: | 
-          echo Hello from Build Workflow! TEST_WORKFLOW: $TEST_WORKFLOW, CLEANUP_WORKFLOW: $CLEANUP_WORKFLOW
+          echo Hello from Build Workflow! TEST_WORKFLOW: ${{ env.TEST_WORKFLOW }}, CLEANUP_WORKFLOW: $CLEANUP_WORKFLOW
       - name: Print JSON String
         run: |
           echo JSON String: ${{ format('''[{0}{1}]''', env.TEST_WORKFLOW, env.CLEANUP_WORKFLOW) }}
           echo "WORKFLOW_JSON_STRING=${{ format('''[{0}{1}]''', '$TEST_WORKFLOW', '$CLEANUP_WORKFLOW') }}" >> $GITHUB_ENV
-          echo JSON String from env Var: "$WORKFLOW_JSON_STRING"
+          echo JSON String from env Var: $WORKFLOW_JSON_STRING
 
           nextWorkflow="$(echo '$WORKFLOW_JSON_STRING' | jq '.[0]')";
           echo "$nextWorkflow";
