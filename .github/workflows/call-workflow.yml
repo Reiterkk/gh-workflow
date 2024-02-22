@@ -13,11 +13,19 @@ on:
         default: ''
 
 jobs:
+  print-input:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print inputs
+        run: |
+          echo Workflow to call: ${{ inputs.workflow-to-call }}
+          echo Remaining Workflows: ${{ inputs.remaining-workflows }}
+
   test:
-    if: inputs.workflow-to-call == 'test'
+    if: ${{ inputs.workflow-to-call == 'test' }}
     uses: ./.github/workflows/test.yml
     with:
       workflows-to-dispatch: ${{ inputs.remaining-workflows }}
   cleanup:
-    if: inputs.workflow-to-call == 'cleanup'
+    if: ${{ inputs.workflow-to-call == 'cleanup' }}
     uses: ./.github/workflows/cleanup.yml
