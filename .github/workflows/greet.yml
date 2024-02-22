@@ -79,10 +79,10 @@ jobs:
           await github.rest.actions.createWorkflowDispatch({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            workflow_id: '${{env.NEXT_WORKFLOW}}.yml',
+            workflow_id: 'test.yml',
             ref: '${{ github.ref_name }}',
             inputs: {
-              workflows_to_dispatch: '${{ env.WORKFLOW_JSON_STRING }}'
+              workflows_to_dispatch: $WORKFLOW_JSON_STRING
             },
           })
 
