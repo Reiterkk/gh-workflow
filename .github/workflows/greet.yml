@@ -71,8 +71,8 @@ jobs:
     needs: build-job
     uses: ./.github/workflows/call-workflow.yml
     with:
-      workflow-to-call: $NEXT_WORKFLOW
-      remaining-workflows: $WORKFLOW_JSON_STRING
+      workflow-to-call: ${{github.env.NEXT_WORKFLOW}}
+      remaining-workflows: ${{github.env.WORKFLOW_JSON_STRING}}
     secrets: inherit
 
     # needs: build-job
