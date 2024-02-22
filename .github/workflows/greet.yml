@@ -50,5 +50,5 @@ jobs:
           echo "NEXT_WORKFLOW=$nextWorkflow" >> "$GITHUB_OUTPUT"
           echo Next Workflow from env Var: "$NEXT_WORKFLOW"
 
-  call-next-workflow:
-    uses: ./.github/workflows/"$NEXT_WORKFLOW".yml
+  # call-next-workflow:
+  #   uses: ./.github/workflows/"$NEXT_WORKFLOW".yml
