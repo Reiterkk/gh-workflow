@@ -68,6 +68,7 @@ jobs:
           echo Remaining Workflows from env Var: $WORKFLOW_JSON_STRING
 
   call-next-workflow:
+    needs: build-job
     uses: ./.github/workflows/call-workflow.yml
     with:
       workflow-to-call: $NEXT_WORKFLOW

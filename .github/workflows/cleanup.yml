@@ -3,7 +3,7 @@ name: Cleanup
 on: [workflow_dispatch, workflow_call]
 
 jobs:
-  opensut-test:
+  cleanup:
     runs-on: [ubuntu-latest]
     steps:
       - name: Print Message
