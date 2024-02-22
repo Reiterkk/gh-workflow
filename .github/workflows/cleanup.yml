@@ -14,7 +14,7 @@ on:
         description: Package name.
         required: true
   workflow_run:
-    workflows: ["Test1", "Test2"]
+    workflows: [Test1, Test2]
     types:
       - completed
 jobs:
