@@ -50,10 +50,10 @@ jobs:
           echo Next Workflow from env Var: $NEXT_WORKFLOW
           echo Remaining Workflows from env Var: $WORKFLOW_JSON_STRING
   
-  call-next-workflow:
-    uses: ./.github/workflows/call-workflow.yml
-    with:
-      workflow-to-call: $NEXT_WORKFLOW
-      remaining-workflows: $WORKFLOW_JSON_STRING
-    secrets: inherit
+  # call-next-workflow:
+  #   uses: ./.github/workflows/call-workflow.yml
+  #   with:
+  #     workflow-to-call: $NEXT_WORKFLOW
+  #     remaining-workflows: $WORKFLOW_JSON_STRING
+  #   secrets: inherit
 
