@@ -7,10 +7,10 @@ on:
         type: string
         description: JSON string containing a list of workflows to be dispatched.
         required: true
-      workflow-id:
-        type: number
-        description: Index of next workflow to be dispatched.
-        required: true
+      # workflow-id:
+      #   type: number
+      #   description: Index of next workflow to be dispatched.
+      #   required: true
 
 jobs:
   opensut-test:
@@ -19,4 +19,7 @@ jobs:
       - name: Print Message
         run: | 
           echo Hello from OpenSUT Test Workflow!
+      - name: Print Remaining Workflows
+        run: |
+          echo Workflows to dispatch: ${{inputs.workflows-to-dispatch}}
 
