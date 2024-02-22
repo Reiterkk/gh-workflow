@@ -15,8 +15,8 @@ on:
   #       required: true
   workflow_run:
     workflows: 
-      - Build
       - Test1
+      - Test2
     types:
       - completed
 jobs:
