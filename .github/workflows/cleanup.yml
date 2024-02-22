@@ -1,20 +1,20 @@
 name: Cleanup
 
 on: 
-  workflow_dispatch:
-    inputs:
-      package:
-        type: string
-        description: Package name.
-        required: true
-  workflow_call:
-    inputs:
-      package:
-        type: string
-        description: Package name.
-        required: true
+  # workflow_dispatch:
+  #   inputs:
+  #     package:
+  #       type: string
+  #       description: Package name.
+  #       required: true
+  # workflow_call:
+  #   inputs:
+  #     package:
+  #       type: string
+  #       description: Package name.
+  #       required: true
   workflow_run:
-    workflows: [Test1, Test2]
+    workflows: [Test1]
     types:
       - completed
 jobs:
